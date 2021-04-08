@@ -142,11 +142,19 @@ public class DrawShapes extends JFrame
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 // TODO use this to grow/shrink shapes
+            	// roll up to shrink and roll down to grow
+            	System.out.printf("mouseWheelRotated! (%d)", e.getWheelRotation());
+            	if(e.getWheelRotation()<0)
+            		scene.scale(0.75);
+            	if(e.getWheelRotation()>0)
+            		scene.scale(1.5);
+            	repaint();
             }
             
         };
         shapePanel.addMouseMotionListener(a);
         shapePanel.addMouseListener(a);
+        shapePanel.addMouseWheelListener(a);
     }
     
     /**
@@ -209,7 +217,7 @@ public class DrawShapes extends JFrame
             }
         });
         fileMenu.addSeparator();
-        // edit
+        // exit
         JMenuItem itemExit = new JMenuItem ("Exit");
         fileMenu.add(itemExit);
         itemExit.addActionListener(new ActionListener() {
@@ -250,6 +258,16 @@ public class DrawShapes extends JFrame
             }
         });
         
+        // green color
+        addToMenu(colorMenu, "Green", new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String text=e.getActionCommand();
+        		System.out.println(text);
+        		// change the color instance variable to green
+        		color = Color.green;
+        	}
+        });
+        
         // shape menu
         JMenu shapeMenu = new JMenu("Shape");
         menuBar.add(shapeMenu);
@@ -270,6 +288,15 @@ public class DrawShapes extends JFrame
                 System.out.println("Circle");
                 shapeType = ShapeType.CIRCLE;
             }
+        });
+        
+        // rectangle
+        addToMenu(shapeMenu, "Rectangle", new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		System.out.println("Circle");
+        		shapeType = ShapeType.RECTANGLE;
+        	}
         });
         
         
@@ -295,6 +322,16 @@ public class DrawShapes extends JFrame
                 scene.scale(0.75);
                 repaint();
             }
+        });
+        
+        //remove
+        addToMenu(operationModeMenu, "Remove", new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String text=e.getActionCommand();
+        		System.out.println(text);
+        		scene.removeSelected();
+        		repaint();
+        	}
         });
         
         // move option
@@ -331,7 +368,10 @@ public class DrawShapes extends JFrame
             		scene.moveSelected(-50, 0);
             	} else if (e.getKeyCode() == KeyEvent.VK_UP) {
             		scene.moveSelected(0, -50);
-            	}
+            	} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+            		scene.moveSelected(0, 50);
+            	} else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+            		scene.moveSelected(50, 0);
             	repaint();
             }
             public void keyReleased(KeyEvent e){
