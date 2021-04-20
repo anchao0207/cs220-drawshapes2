@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+
 /**
  * A scene of shapes.  Uses the Model-View-Controller (MVC) design pattern,
  * though note that model knows something about the view, as the draw() 
@@ -203,6 +204,16 @@ public class Scene implements Iterable<IShape>
                 Rectangle rec = new Rectangle(new Point(left, top), width, height, color);
                 rec.setSelected(selected);
                 addShape(rec);
+            } else if (type.startsWith("TRIANGLE")) {
+            	//TRIANGLE centerx centery length color selected
+            	int centerx = scan.nextInt();
+            	int centery = scan.nextInt();
+            	int length = scan.nextInt();
+            	Color color = Util.stringToColor(scan.next());
+                boolean selected = Boolean.parseBoolean(scan.next());
+                Triangle triangle = new Triangle(color, new Point(centerx, centery),length);
+                triangle.setSelected(selected);
+                addShape(triangle);
             }
         }
     }
@@ -219,5 +230,27 @@ public class Scene implements Iterable<IShape>
 		}
 	}
 	
+	public void moveSelected(Point p) {
+		for(IShape s : shapeList) {
+			if(s.isSelected()) {
+				s.move(p.x-s.getAnchorPoint().x, p.y-s.getAnchorPoint().y);
+			}
+		}
+	}
+	
+	public void swap() {
+		List<IShape> selected = new LinkedList<IShape>();
+		for(IShape s:shapeList) {
+			if(s.isSelected())
+				selected.add(s);
+		}
+		for(int i=0;i<selected.size()-1;i++) {
+			selected.get(i).swap((AbstractShape) selected.get(i+1));
+		}
+	}
+	
+	public void clear() {
+		removeShapes(shapeList);
+	}
 	
 }

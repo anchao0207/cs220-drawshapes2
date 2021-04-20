@@ -76,4 +76,6 @@ public interface IShape extends IMoveableShape
      * @param p
      */
     public void setAnchorPoint(Point p);
+    
+    public void swap(AbstractShape other);
 }

@@ -56,6 +56,18 @@ public abstract class AbstractShape implements IShape {
 		this.boundingBox.move(dx, dy);
 	}
 	
+	@Override
+	public void swap(AbstractShape other) {
+		Point temp;
+		BoundingBox temp1;
+		temp=this.getAnchorPoint();
+		this.setAnchorPoint(other.getAnchorPoint());
+		other.setAnchorPoint(temp);
+		temp1=this.getBoundingBox();
+		this.boundingBox=other.getBoundingBox();
+		other.boundingBox=temp1;
+	}
+	
 	 /**
      * Returns the bounding box of this shape. The bounding box
      * is the max/min X and Y coordinates.

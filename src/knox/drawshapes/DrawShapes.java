@@ -28,7 +28,8 @@ public class DrawShapes extends JFrame
     private enum ShapeType {
         SQUARE,
         CIRCLE,
-        RECTANGLE
+        RECTANGLE,
+        TRIANGLE
     }
     
     private DrawShapesPanel shapePanel;
@@ -89,6 +90,10 @@ public class DrawShapes extends JFrame
                                 100, 
                                 200,
                                 color));
+                    } else if(shapeType == ShapeType.TRIANGLE) {
+                    	scene.addShape(new Triangle(color,
+                    			e.getPoint(),
+                    			100));
                     }
                     
                 } else if (e.getButton()==MouseEvent.BUTTON2) {
@@ -138,6 +143,8 @@ public class DrawShapes extends JFrame
                 scene.updateSelectRect(e.getPoint());
                 repaint();
             }
+            
+            
 
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
@@ -299,6 +306,15 @@ public class DrawShapes extends JFrame
         	}
         });
         
+        //triangle
+        addToMenu(shapeMenu,"Triangle", new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		System.out.println("Triangle");
+        		shapeType = ShapeType.TRIANGLE;
+        	}
+        });
+        
         
         // operation mode menu
         JMenu operationModeMenu=new JMenu("Operation");
@@ -324,12 +340,12 @@ public class DrawShapes extends JFrame
             }
         });
         
-        //remove
-        addToMenu(operationModeMenu, "Remove", new ActionListener() {
+        //clear
+        addToMenu(operationModeMenu, "Clear", new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		String text=e.getActionCommand();
         		System.out.println(text);
-        		scene.removeSelected();
+        		scene.clear();
         		repaint();
         	}
         });
@@ -340,7 +356,34 @@ public class DrawShapes extends JFrame
                 String text=e.getActionCommand();
                 // currently this just prints
                 System.out.println(text);
+                
+                MouseAdapter a = new MouseAdapter() {
+                    
+                    public void mouseClicked(MouseEvent e)
+                    {
+                    	System.out.printf("Mouse cliked at (%d, %d)\n", e.getX(), e.getY());
+                        
+                        if (e.getButton()==MouseEvent.BUTTON1) { 
+                            scene.moveSelected(new Point(e.getX(),e.getY()));
+                            
+                        }
+                    }
+                    
+                };
+                shapePanel.addMouseListener(a);
             }
+        });
+            
+        //Swap
+        addToMenu(operationModeMenu,"Swap",new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String text=e.getActionCommand();
+        		System.out.println(text);
+        		scene.swap();
+        		repaint();
+				
+			}
         });
         
 

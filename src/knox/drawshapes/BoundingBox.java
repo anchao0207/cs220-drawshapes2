@@ -40,6 +40,8 @@ class BoundingBox
     	this.bottom += dy;
     }
     
+   
+    
     boolean intersects(BoundingBox other){
         // are any of my corners in their bounding box?
         for (Point corner : corners){
